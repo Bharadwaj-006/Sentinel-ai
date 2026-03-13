@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>SentinelAI Security Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+font-family: Arial;
+background:#0d1117;
+color:white;
+text-align:center;
+}
+
+h1{
+color:#ff3b3b;
+}
+
+table{
+margin:auto;
+border-collapse: collapse;
+width:80%;
+margin-top:30px;
+}
+
+th,td{
+border:1px solid #444;
+padding:10px;
+}
+
+th{
+background:#ff3b3b;
+}
+
+tr:nth-child(even){
+background:#161b22;
+}
+
+.counter{
+font-size:24px;
+margin:20px;
+color:#00ff9c;
+}
+
+.chart-container{
+width:70%;
+margin:auto;
+margin-top:40px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🚨 SentinelAI Intrusion Detection Dashboard</h1>
+
+<div class="counter">
+Total Attacks Detected: {{ count }}
+</div>
+
+<div class="chart-container">
+<canvas id="attackChart"></canvas>
+</div>
+
+<table>
+
+<tr>
+<th>IP Address</th>
+<th>Attack Type</th>
+<th>Time</th>
+</tr>
+
+{% for attack in attacks %}
+
+<tr>
+<td>{{ attack[0] }}</td>
+<td>{{ attack[1] }}</td>
+<td>{{ attack[2] }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<script>
+
+const ctx = document.getElementById('attackChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ labels | safe }},
+        datasets: [{
+            label: 'Attack Count by IP',
+            data: {{ values | safe }},
+            borderWidth: 1
+        }]
+    },
+    options: {
+        plugins:{
+            legend:{labels:{color:"white"}}
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks:{color:"white"}
+            },
+            x:{
+                ticks:{color:"white"}
+            }
+        }
+    }
+});
+
+</script>
+
+</body>
+</html>
